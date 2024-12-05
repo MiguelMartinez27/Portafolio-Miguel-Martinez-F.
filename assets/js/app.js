@@ -1,5 +1,5 @@
 // const githubUsername = "TU_USUARIO_DE_GITHUB";
-const githubUsername = "Miguelmartinez27";
+const githubUsername = "MiguelMartinez27";
 const projectContainer = document.getElementById("project-cards");
 
 // Función para truncar texto
@@ -18,9 +18,11 @@ function limitTopics(topics) {
 // Función para cargar repositorios propios con tópicos
 async function fetchUserRepos() {
   try {
-    // Endpoint para obtener todos los repositorios del usuario
     const response = await fetch(
-      `https://api.github.com/users/${githubUsername}/repos`
+      `https://api.github.com/users/${githubUsername}/repos`,
+      {
+        headers: { Accept: "application/vnd.github.mercy-preview+json" },
+      }
     );
     if (!response.ok) {
       throw new Error(
@@ -30,10 +32,9 @@ async function fetchUserRepos() {
 
     const repos = await response.json();
 
-    // Procesar repositorios
     repos.forEach((repo) => {
-      // Crear una tarjeta solo si tiene al menos un lenguaje asociado
-      if (repo.topics && repo.topics.length > 0) {
+      // Mostrar solo los repositorios con al menos 1 estrella
+      if (repo.stargazers_count > 0) {
         createProjectCard(repo);
       }
     });
